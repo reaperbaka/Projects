@@ -62,7 +62,18 @@ pyinstaller --onefile --windowed main.py
 
 ## 📸 Screenshots
 
-(Add screenshots here later)
+### 🔐 Login Screen
+![Login](screenshots/login.png)
+
+### 🛠️ Admin Panel
+![Admin](screenshots/admin.png)
+
+### 👨‍🎓 Student Dashboard
+![Student](screenshots/student.png)
+
+### 📚 Book Management
+![Books](screenshots/books.png)
+
 
 ---
 
