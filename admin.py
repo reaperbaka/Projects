@@ -34,19 +34,20 @@ class AdminMixin:
             fill="x", padx=24, pady=(28, 16))
 
         form = tk.Frame(card, bg=BG_CARD)
-        form.pack(padx=24)
+        form.pack(padx=36, fill="x")
+        form.grid_columnconfigure(1, weight=1)
 
         make_label(form, "Username", muted=True).grid(
-            row=0, column=0, sticky="e", padx=(0, 10), pady=10)
+            row=0, column=0, sticky="e", padx=(0, 12), pady=10)
         self.username_entry = make_entry(form)
-        self.username_entry.grid(row=0, column=1, pady=10, sticky="w")
+        self.username_entry.grid(row=0, column=1, pady=10, sticky="ew", ipady=4)
         self.username_entry.bind(
             "<Return>", lambda e: self.password_entry.focus_set())
 
         make_label(form, "Password", muted=True).grid(
-            row=1, column=0, sticky="e", padx=(0, 10), pady=10)
+            row=1, column=0, sticky="e", padx=(0, 12), pady=10)
         pass_wrap, self.password_entry = make_password_field(form)
-        pass_wrap.grid(row=1, column=1, pady=10, sticky="w")
+        pass_wrap.grid(row=1, column=1, pady=10, sticky="ew")
         self.password_entry.bind("<Return>", lambda e: self.admin_login())
 
         btn_row = tk.Frame(card, bg=BG_CARD)
@@ -70,25 +71,25 @@ class AdminMixin:
     def main_menu(self):
         self._clear()
         self.root.title("LMS — Admin Panel")
-        self.root.geometry("1200x750")
+        self.root.geometry("1300x820")
         self._header("Admin Panel")
 
         outer = tk.Frame(self.root, bg=BG_DARK)
         outer.pack(fill="both", expand=True)
 
         # ── Left Sidebar ──────────────────────────────────────────────────────
-        self._sidebar = tk.Frame(outer, bg=BG_CARD, width=200,
+        self._sidebar = tk.Frame(outer, bg=BG_CARD, width=240,
                                  highlightbackground=BORDER,
                                  highlightthickness=1)
         self._sidebar.pack(side="left", fill="y")
         self._sidebar.pack_propagate(False)
 
         tk.Label(self._sidebar, text="📚 LMS", bg=BG_CARD, fg=ACCENT,
-                 font=("Segoe UI", 15, "bold")).pack(pady=(20, 4))
+                 font=("Segoe UI", 17, "bold")).pack(pady=(26, 4))
         tk.Label(self._sidebar, text="Admin Panel", bg=BG_CARD, fg=TEXT_MUTE,
-                 font=("Segoe UI", 9)).pack()
+                 font=("Segoe UI", 10)).pack()
         tk.Frame(self._sidebar, bg=BORDER, height=1).pack(
-            fill="x", padx=16, pady=12)
+            fill="x", padx=20, pady=16)
 
         self._nav_buttons = {}
         for name in ["Dashboard", "Books", "Students", "Issued Books", "Search"]:
@@ -98,9 +99,9 @@ class AdminMixin:
                           command=lambda n=name: self._load_section(n),
                           bg=BG_CARD, fg=TEXT_MAIN,
                           activebackground=BG_PANEL, activeforeground=ACCENT,
-                          font=("Segoe UI", 10),
+                          font=("Segoe UI", 11),
                           relief="flat", cursor="hand2",
-                          anchor="w", padx=8, pady=10, bd=0)
+                          anchor="w", padx=14, pady=13, bd=0)
             b.pack(fill="x")
             b.bind("<Enter>",
                    lambda e, btn=b: btn.config(bg=BG_PANEL, fg=ACCENT)
@@ -111,16 +112,16 @@ class AdminMixin:
             self._nav_buttons[name] = b
 
         tk.Frame(self._sidebar, bg=BORDER, height=1).pack(
-            fill="x", padx=16, pady=8)
+            fill="x", padx=20, pady=12)
 
         def confirm_exit():
             if messagebox.askyesno("Exit", "Are you sure you want to exit?"):
                 self.root.quit()
 
         make_btn(self._sidebar, "← Back", self.init_login_screen,
-                 small=True).pack(fill="x", padx=12, pady=3)
+                 small=True).pack(fill="x", padx=16, pady=4)
         make_btn(self._sidebar, "Exit", confirm_exit,
-                 danger=True, small=True).pack(fill="x", padx=12, pady=(3, 20))
+                 danger=True, small=True).pack(fill="x", padx=16, pady=(4, 24))
 
         # ── Right Content Area ────────────────────────────────────────────────
         self._content = tk.Frame(outer, bg=BG_CARD,
@@ -163,10 +164,10 @@ class AdminMixin:
         """Renders a section title + divider inside content area."""
         tk.Label(self._content, text=title,
                  bg=BG_CARD, fg=TEXT_MAIN,
-                 font=("Segoe UI", 18, "bold")).pack(
-                     anchor="w", padx=28, pady=(24, 0))
+                 font=("Segoe UI", 22, "bold")).pack(
+                     anchor="w", padx=36, pady=(32, 0))
         tk.Frame(self._content, bg=BORDER, height=1).pack(
-            fill="x", padx=28, pady=(10, 0))
+            fill="x", padx=36, pady=(12, 0))
 
     # ── Section: Dashboard ────────────────────────────────────────────────────
     def _section_dashboard(self):
@@ -185,17 +186,17 @@ class AdminMixin:
             ("issued",       "Books Issued",     "#E05252"),
         ]
         grid = tk.Frame(parent, bg=BG_CARD)
-        grid.pack(pady=28, padx=28, anchor="w")
+        grid.pack(pady=36, padx=36, anchor="w")
         for i, (key, label, color) in enumerate(stat_defs):
-            tile = tk.Frame(grid, bg=BG_PANEL, width=160, height=100,
+            tile = tk.Frame(grid, bg=BG_PANEL, width=200, height=120,
                             highlightbackground=BORDER, highlightthickness=1)
-            tile.grid(row=0, column=i, padx=8)
+            tile.grid(row=0, column=i, padx=10)
             tile.pack_propagate(False)
             num = tk.Label(tile, text="—", bg=BG_PANEL, fg=color,
-                           font=("Segoe UI", 30, "bold"))
-            num.pack(pady=(16, 0))
+                           font=("Segoe UI", 34, "bold"))
+            num.pack(pady=(20, 2))
             tk.Label(tile, text=label, bg=BG_PANEL, fg=TEXT_MUTE,
-                     font=("Segoe UI", 9)).pack()
+                     font=("Segoe UI", 10)).pack()
             self._stat_labels[key] = num
         self._refresh_stats()
 
@@ -222,13 +223,13 @@ class AdminMixin:
 
         # Contextual toolbar
         bar = tk.Frame(self._content, bg=BG_CARD)
-        bar.pack(fill="x", padx=28, pady=10)
+        bar.pack(fill="x", padx=36, pady=14)
         make_btn(bar, "+ Add Book",
                  lambda: self._modal_add_book(self._refresh_books_table),
-                 small=True).pack(side="left", padx=(0, 6))
+                 small=True).pack(side="left", padx=(0, 8))
         make_btn(bar, "＋ Add Copies",
                  lambda: self._modal_add_copies(self._refresh_books_table),
-                 small=True).pack(side="left", padx=(0, 6))
+                 small=True).pack(side="left", padx=(0, 8))
         make_btn(bar, "－ Remove Copies",
                  lambda: self._modal_remove_copies(self._refresh_books_table),
                  small=True).pack(side="left")
@@ -237,7 +238,7 @@ class AdminMixin:
         cols = ("ID", "Title", "Author", "Total",
                 "Available", "Publication", "Price")
         tbl_frame, self._books_tree = make_tree(self._content, cols)
-        tbl_frame.pack(fill="both", expand=True, padx=28, pady=(8, 16))
+        tbl_frame.pack(fill="both", expand=True, padx=36, pady=(4, 20))
         self._refresh_books_table()
 
     def _refresh_books_table(self):
@@ -256,7 +257,7 @@ class AdminMixin:
 
         cols = ("ID", "Name", "Email", "Class", "Year", "Phone")
         tbl_frame, tree = make_tree(self._content, cols)
-        tbl_frame.pack(fill="both", expand=True, padx=28, pady=(12, 16))
+        tbl_frame.pack(fill="both", expand=True, padx=36, pady=(16, 20))
         cursor.execute(
             "SELECT student_id, name, email, class, year, phone FROM students")
         for row in cursor.fetchall():
@@ -268,10 +269,10 @@ class AdminMixin:
 
         # Contextual toolbar
         bar = tk.Frame(self._content, bg=BG_CARD)
-        bar.pack(fill="x", padx=28, pady=10)
+        bar.pack(fill="x", padx=36, pady=14)
         make_btn(bar, "📤 Issue Book",
                  lambda: self._modal_issue(self._refresh_issued_table),
-                 small=True).pack(side="left", padx=(0, 6))
+                 small=True).pack(side="left", padx=(0, 8))
         make_btn(bar, "📥 Return Book",
                  lambda: self._modal_return(self._refresh_issued_table),
                  small=True).pack(side="left")
@@ -280,7 +281,7 @@ class AdminMixin:
         cols = ("Issue ID", "Student Name", "Student ID",
                 "Book ID", "Issue Date", "Due Date", "Return Date", "Fine (₹)")
         tbl_frame, self._issued_tree = make_tree(self._content, cols)
-        tbl_frame.pack(fill="both", expand=True, padx=28, pady=(8, 16))
+        tbl_frame.pack(fill="both", expand=True, padx=36, pady=(4, 20))
         self._refresh_issued_table()
 
     def _refresh_issued_table(self):
@@ -300,16 +301,16 @@ class AdminMixin:
         self._section_header("Search Books")
 
         bar = tk.Frame(self._content, bg=BG_CARD)
-        bar.pack(fill="x", padx=28, pady=12)
+        bar.pack(fill="x", padx=36, pady=16)
 
         search_entry = make_entry(bar)
-        search_entry.config(width=40)
-        search_entry.pack(side="left", padx=(0, 8))
+        search_entry.config(width=44)
+        search_entry.pack(side="left", padx=(0, 10))
 
         cols = ("ID", "Title", "Author", "Total",
                 "Available", "Publication", "Price")
         tbl_frame, tree = make_tree(self._content, cols)
-        tbl_frame.pack(fill="both", expand=True, padx=28, pady=(0, 16))
+        tbl_frame.pack(fill="both", expand=True, padx=36, pady=(0, 20))
 
         def perform():
             for row in tree.get_children():
@@ -333,7 +334,7 @@ class AdminMixin:
 
     # ── Modal: Add Book ───────────────────────────────────────────────────────
     def _modal_add_book(self, on_done=None):
-        win, body = open_modal(self.root, "Add Book", 520, 400)
+        win, body = open_modal(self.root, "Add Book", 580, 460)
         form = tk.Frame(body, bg=BG_CARD)
         form.pack(fill="x")
 
@@ -375,7 +376,7 @@ class AdminMixin:
 
     # ── Modal: Add Copies ─────────────────────────────────────────────────────
     def _modal_add_copies(self, on_done=None):
-        win, body = open_modal(self.root, "Add Book Copies", 480, 260)
+        win, body = open_modal(self.root, "Add Book Copies", 540, 300)
         form = tk.Frame(body, bg=BG_CARD)
         form.pack(fill="x")
 
@@ -423,7 +424,7 @@ class AdminMixin:
 
     # ── Modal: Remove Copies ──────────────────────────────────────────────────
     def _modal_remove_copies(self, on_done=None):
-        win, body = open_modal(self.root, "Remove Book Copies", 480, 260)
+        win, body = open_modal(self.root, "Remove Book Copies", 540, 300)
         form = tk.Frame(body, bg=BG_CARD)
         form.pack(fill="x")
 
@@ -481,7 +482,7 @@ class AdminMixin:
 
     # ── Modal: Issue Book ─────────────────────────────────────────────────────
     def _modal_issue(self, on_done=None):
-        win, body = open_modal(self.root, "Issue Book", 540, 440)
+        win, body = open_modal(self.root, "Issue Book", 600, 500)
         form = tk.Frame(body, bg=BG_CARD)
         form.pack(fill="x")
 
@@ -549,7 +550,7 @@ class AdminMixin:
 
     # ── Modal: Return Book ────────────────────────────────────────────────────
     def _modal_return(self, on_done=None):
-        win, body = open_modal(self.root, "Return Book", 500, 300)
+        win, body = open_modal(self.root, "Return Book", 560, 340)
         form = tk.Frame(body, bg=BG_CARD)
         form.pack(fill="x")
 

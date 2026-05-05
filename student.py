@@ -35,17 +35,18 @@ class StudentMixin:
             fill="x", padx=24, pady=(28, 16))
 
         form = tk.Frame(card, bg=BG_CARD)
-        form.pack(padx=24)
+        form.pack(padx=36, fill="x")
+        form.grid_columnconfigure(1, weight=1)
 
         make_label(form, "Student ID", muted=True).grid(
-            row=0, column=0, sticky="e", padx=(0, 12), pady=12)
+            row=0, column=0, sticky="e", padx=(0, 12), pady=10)
         id_entry = make_entry(form)
-        id_entry.grid(row=0, column=1, pady=12, sticky="w")
+        id_entry.grid(row=0, column=1, pady=10, sticky="ew", ipady=4)
 
         make_label(form, "Password", muted=True).grid(
-            row=1, column=0, sticky="e", padx=(0, 12), pady=12)
+            row=1, column=0, sticky="e", padx=(0, 12), pady=10)
         pass_wrap, pass_entry = make_password_field(form)
-        pass_wrap.grid(row=1, column=1, pady=12, sticky="w")
+        pass_wrap.grid(row=1, column=1, pady=10, sticky="ew")
 
         # Enter on Student ID → jump to password
         id_entry.bind("<Return>", lambda e: pass_entry.focus_set())
