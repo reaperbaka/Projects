@@ -1,7 +1,14 @@
 # ── database.py ──────────────────────────────────────────────────────────────
 import sqlite3
+import os
+import sys
 
-conn   = sqlite3.connect("library.db")
+def get_db_path():
+    if getattr(sys, 'frozen', False):
+        return os.path.join(sys._MEIPASS, "library.db")
+    return "library.db"
+
+conn = sqlite3.connect(get_db_path())
 cursor = conn.cursor()
 
 cursor.execute("""
